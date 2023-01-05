@@ -1,0 +1,14 @@
+pince = DoosanRobotiqModbus(ip="192.168.1.11", port=502, model="2f85")
+
+pince.close_gripper(speed=75, force=75)
+wait(2)
+
+pince.open_gripper(25, 25)
+wait(3)
+
+pince.move_gripper(speed=50, force=50, position=30)
+wait(2)
+
+pince.log_status()
+
+pince.close_connexion()
