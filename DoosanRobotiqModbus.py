@@ -31,13 +31,13 @@ class DoosanRobotiqModbus:
         Params:\n
             - 'ip': ip of Modbus slave 
             - 'port': port number of the Modbus slave
-            - 'model': model of the Robotiq gripper (2f85 or 2f140)
+            - 'model': model of the Robotiq gripper (2f85 or 2f140 or hande)
         """
 
         self.ip = ip
         self.port = port
-        if (model!="2f85") and (model!="2f140"):
-            tp_popup("Le modèle choisi n'est pas compatible. Les modèles compatibles sont : 2f85 et 2f140")
+        if (model!="2f85") and (model!="2f140") and (model!="hande"):
+            tp_popup("Le modèle choisi n'est pas compatible. Les modèles compatibles sont : 2f85, 2f140 et hande")
             exit()
         else:
             self.model = model
@@ -107,17 +107,19 @@ class DoosanRobotiqModbus:
             res = self.move_gripper(speed, force, 85)
         elif (self.model == "2f140"):
             res = self.move_gripper(speed, force, 140)
+        elif (self.model == "hande"):
+            res = self.move_gripper(speed, force, 50)
         return res
 
 
-    def move_gripper(self, speed = 50, force = 50, position = 85):
+    def move_gripper(self, speed = 50, force = 50, position = 0):
         """
         Move the gripper to the desired position with the speed and force choosen.
 
         Params:\n
             - 'speed': desired speed for the movement of the gripper between 0% and 100% (default is 50%)
             - 'force': desired force for the gripper between 0% and 100% (default is 50%)
-            - 'position' : desired position for the gripper between 0 mm and 85 mm for 2f85, and between 0 mm and 140 mm for 2f140 (0 = close, 85 or 140 = open, default is 85)
+            - 'position' : desired position for the gripper between 0 mm and 85 mm for 2f85, between 0 mm and 140 mm for 2f140, and between 0 mm and 50 mm for hande (0 = close, 50/85/140 = open, default is 0)
         
         Return:\n
             - '1' : The parameters are good, the motion command has been send
@@ -144,6 +146,9 @@ class DoosanRobotiqModbus:
         elif (position > 140) and (self.model == "2f140"):
             tp_popup("Wrong position (>140 mm)")
             return -1
+        elif (position > 50) and (self.model == "hande"):
+            tp_popup("Wrong position (>50 mm)")
+            return -1
         elif (position < 0):
             tp_popup("Wrong position (<0 mm)")
             return -1
@@ -163,6 +168,8 @@ class DoosanRobotiqModbus:
             pos = round(((85-position)/85)*255)
         elif (self.model == "2f140"):
             pos = round(((140-position)/140)*255)
+        elif (self.model == "hande"):
+            pos = round(((50-position)/50)*255)
 
         set_modbus_output("2F_AR_21", 2304) # Doosan modbus communication uses 16-bits bytes, so 2 bytes from the Robotiq registers (here, action request and reserved).
         set_modbus_output("2F_SP_FO_21", speed_force)

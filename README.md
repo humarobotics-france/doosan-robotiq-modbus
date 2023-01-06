@@ -20,7 +20,7 @@ This class has been tested on a Robotiq gripper *2F-85*.
 ## Requirements
 
 - A **Doosan robot**
-- A **Robotiq gripper** (2F-85 or 2F-140)
+- A **Robotiq gripper** (2F-85 or 2F-140 or Hand-E)
 
 ## How to use
 

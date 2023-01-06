@@ -20,7 +20,7 @@ Cette classe a été téstée sur une pince Robotiq *2F-85*.
 ## Conditions requises
 
 - Un **robot Doosan**
-- Une **pince Robotiq** (2F-85 ou 2F-140)
+- Une **pince Robotiq** (2F-85 ou 2F-140 ou Hand-E)
 
 ## Mode d'emploi
 
